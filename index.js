@@ -22,6 +22,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const database = client.db("Bistro_Boss_Restaurant_DB");
+    const selectedOrders = database.collection("selected orders");
 
     app.get("/", async (req, res) => {
       res.send("Server is running.");
@@ -35,6 +36,12 @@ async function run() {
     app.get("/reviews", async (req, res) => {
       const reviews = await database.collection("reviews").find().toArray();
       res.send(reviews);
+    });
+
+    app.post("/selected-orders", async (req, res) => {
+      const ordersDetails = req.body;
+      const result = await selectedOrders.insertOne(ordersDetails);
+      res.send(result);
     });
   } catch {
     // Ensures that the client will close when you finish/error
