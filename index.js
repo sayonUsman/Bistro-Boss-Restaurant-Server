@@ -43,6 +43,13 @@ async function run() {
       const result = await selectedOrders.insertOne(ordersDetails);
       res.send(result);
     });
+
+    app.get("/selected-orders", async (req, res) => {
+      const email = req.query.email;
+      const query = { customerEmail: email };
+      const result = await selectedOrders.find(query).toArray();
+      res.send(result);
+    });
   } catch {
     // Ensures that the client will close when you finish/error
     await client.close();
